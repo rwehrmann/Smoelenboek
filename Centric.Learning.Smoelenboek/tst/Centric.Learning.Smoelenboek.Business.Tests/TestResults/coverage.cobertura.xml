@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<coverage line-rate="0.8887999999999999" branch-rate="1" version="1.9" timestamp="1589831807" lines-covered="8" lines-valid="9" branches-covered="4" branches-valid="4">
+  <sources>
+    <source>/mnt/c/Sources/Repos/Smoelenboek/Centric.Learning.Smoelenboek/src/Centric.Learning.Smoelenboek.Business/</source>
+  </sources>
+  <packages>
+    <package name="Centric.Learning.Smoelenboek.Business" line-rate="0.8887999999999999" branch-rate="1" complexity="11">
+      <classes>
+        <class name="Centric.Learning.Smoelenboek.Business.Initializer/&lt;&gt;c" filename="Initializer/Initializer.cs" line-rate="1" branch-rate="1" complexity="4">
+          <methods>
+            <method name="&lt;Initialise&gt;b__0_0" signature="(Centric.Learning.Smoelenboek.Business.Person)" line-rate="1" branch-rate="1">
+              <lines>
+                <line number="15" hits="8" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="180" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+            <method name="&lt;Initialise&gt;b__0_1" signature="(Centric.Learning.Smoelenboek.Business.Person)" line-rate="1" branch-rate="1">
+              <lines>
+                <line number="35" hits="8" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="612" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="15" hits="8" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="180" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="35" hits="8" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="612" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+          </lines>
+        </class>
+        <class name="Centric.Learning.Smoelenboek.Business.Person" filename="Person.cs" line-rate="0.8571" branch-rate="1" complexity="7">
+          <methods>
+            <method name="get_PersonId" signature="()" line-rate="1" branch-rate="1">
+              <lines>
+                <line number="16" hits="28" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Name" signature="()" line-rate="1" branch-rate="1">
+              <lines>
+                <line number="22" hits="32" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Nationality" signature="()" line-rate="1" branch-rate="1">
+              <lines>
+                <line number="27" hits="14" branch="False" />
+              </lines>
+            </method>
+            <method name="get_BirthDate" signature="()" line-rate="1" branch-rate="1">
+              <lines>
+                <line number="34" hits="18" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Gender" signature="()" line-rate="0" branch-rate="1">
+              <lines>
+                <line number="39" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Image" signature="()" line-rate="1" branch-rate="1">
+              <lines>
+                <line number="43" hits="18" branch="False" />
+              </lines>
+            </method>
+            <method name="get_ImageUrl" signature="()" line-rate="1" branch-rate="1">
+              <lines>
+                <line number="53" hits="7" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="16" hits="28" branch="False" />
+            <line number="22" hits="32" branch="False" />
+            <line number="27" hits="14" branch="False" />
+            <line number="34" hits="18" branch="False" />
+            <line number="39" hits="0" branch="False" />
+            <line number="43" hits="18" branch="False" />
+            <line number="53" hits="7" branch="False" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>

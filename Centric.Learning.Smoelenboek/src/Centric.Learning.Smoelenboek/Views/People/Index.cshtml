@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Centric.Learning.Smoelenboek.Business.Person>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table people">
+    <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Nationality</th>
+        <th>Gender</th>
+        <th>Date of Birth</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model)
+{
+<tr>
+    <td>
+        <img class="img-thumbnail" src="@item.ImageUrl" alt="@item.Name">
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Nationality)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Gender)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.BirthDate)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.PersonId }) |
+        @Html.ActionLink("Details", "Details", new { id = item.PersonId }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.PersonId })
+    </td>
+</tr>
+}
+
+</table>

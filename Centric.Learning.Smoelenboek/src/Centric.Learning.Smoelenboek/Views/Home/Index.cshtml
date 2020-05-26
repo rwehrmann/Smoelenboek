@@ -1,0 +1,25 @@
+﻿@model SearchViewModel
+@using Centric.Learning.Smoelenboek.Models
+@using Centric.Learning.Smoelenboek.Business
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+    <div class="jumbotron">
+        @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { @class = "form-inline" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.TextBoxFor(m => m.SearchText, new { @class = "form-control mr-sm-2" })
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        }
+
+        <div>Number of searches this session: @ViewBag.SearchCount</div>
+    </div>
+<ul class="search-result">
+    @foreach (Person card in Model.People)
+    {
+        @await Html.PartialAsync("_PersonCard", card)
+    }
+</ul>
+

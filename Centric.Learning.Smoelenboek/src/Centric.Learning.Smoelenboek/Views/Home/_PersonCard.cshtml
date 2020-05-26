@@ -1,0 +1,24 @@
+﻿@model Centric.Learning.Smoelenboek.Business.Person
+
+<li class="card person-card">
+    <img class="card-img-top" src="@Model.ImageUrl" alt="@Model.Name">
+    <div class="card-block">
+        <h4 class="card-title">@Model.Name</h4>
+        <div class="row">
+            <div class="col-6">@Html.DisplayNameFor(model => model.Name):</div>
+            <div class="col-6">@Html.DisplayFor(model => model.Name)</div>
+        </div>
+        <div class="row">
+            <div class="col-6">@Html.DisplayNameFor(model => model.Gender):</div>
+            <div class="col-6">@Html.DisplayFor(model => model.Gender)</div>
+        </div>
+        <div class="row">
+            <div class="col-6">@Html.DisplayNameFor(model => model.Nationality):</div>
+            <div class="col-6">@Html.DisplayFor(model => model.Nationality)</div>
+        </div>
+        <div class="row">
+            <div class="col-6">@Html.DisplayNameFor(model => model.BirthDate):</div>
+            <div class="col-6">@Html.DisplayFor(model => model.BirthDate)</div>
+        </div>
+    </div>
+</li>
