@@ -195,7 +195,7 @@ In this last step you are going to publish the web project, archive it and publi
 * First, add some new variables
 
 ```yaml
-  webProject: '$(build.sourcesDirectory)/**/Centric.Learning.Smoelenboek.csproj'
+  webProject: '**/src/**/Centric.Learning.Smoelenboek.csproj'
 ```
 
 * Add a task that publishes the web project and define the webproject's location in variable called $(webProject)
