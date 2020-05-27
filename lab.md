@@ -5,13 +5,14 @@
 * An Azure DevOps organization. Don't have one? Register one yourself via [link 1](https://app.vsaex.visualstudio.com/) or [link 2](https://azure.microsoft.com/en-us/services/devops/?nav=min) or [link 3](https://dev.azure.com/)
 
 For the sake of simplicity we will import the [code](https://github.com/rwehrmann/Smoelenboek) in your Azure DevOps Git repo allowing you to work independent of others without the hassle of branching.
+
 * In the left hand menu cLick on Repos > import > "https://github.com/rwehrmann/Smoelenboek.git"
 
 ## 1. Introduction
 
 In this lab you will learn setting up a continuous integration (CI) pipeline for a dotNet core web application. You will create an Azure DevOps Pipeline in YAML that guarantees the quality of the software by testing the application after each change.
 
-## 2. Create a Pipeline
+## 2. Create a pipeline
 
 * Navigate to the the Repos tab and click on "Set up build". The button is located in the upper right corner.
 * Choose the starter pipeline.
@@ -38,14 +39,14 @@ This hierarchy is reflected in the structure of a YAML file like:
 Stage A
     Job 1
         Step 1.1
-            Task (or script)
-            Task (or script)
+            Task
+            Task
         Step 1.2
-            Task (or script)
+            Task
         ...
     Job 2
         Step 2.1
-            Task (or script)
+            Task
         Step 2.2
         ...
 Stage B
@@ -55,7 +56,7 @@ See the [YAML schema documentation](https://docs.microsoft.com/en-us/azure/devop
 
 In this excersise we will use a single step. So we can omit stage and job.
 
-### 3. 1 Add a task to build
+### 3. 1 Add a task to build the solution
 
 * Click on 'pipeline' in the menu on the left
 * Select your new pipeline
@@ -97,7 +98,7 @@ variables:
 
 ## 4 Add versioning
 
-The version of the software (files on disk) and the build do not correspond with each other. You can change this by change the name of the build pipline. In this case we make use of some predefined variable you can find [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml)
+The version of the software (files on disk) and the build do not correspond with each other. You can change this by change the name of the build pipline. In this case we make use of some predefined variable you can find [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml).
 More details in the [docs](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/run-number?view=azure-devops&tabs=yaml).
 
 * Edit your build pipeline
@@ -142,7 +143,7 @@ name: $(date:yyyy).$(date:MM).$(date:dd)$(Rev:.r)
 * After the build ran notice the test report!
 * Note the @2 suffix in the name of the task. This denotes the version of the task.
 
-## 6 Change the test task to collect code coverage
+## 6 Collect code coverage
 
 Notice the code coverage report is empty. In this step you will add the neccassery tasks to collect the code coverage form the tests, create a report an publish the report.
 
@@ -153,11 +154,13 @@ Notice the code coverage report is empty. In this step you will add the neccasse
   codeCoverageReportLocation: '$(build.sourcesDirectory)/codecoverage'
 ```
 
-* Change the test task by adding a new input:
+* Change the test task by changing the argument input with below example. Save the pipeline and wait on the build to complete.
 
 ```yaml
 arguments: '/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Threshold=100 /p:ThresholdStat=Average --no-build --no-restore'
 ```
+
+Notice that threshold of 100% code coverage is demanded. The build now fails. Change the threshold to 50%.
 
 * Use a script task that installs the code coverage [report generator](https://github.com/danielpalme/ReportGenerator)
 * Run the generator
@@ -168,6 +171,10 @@ arguments: '/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Thresho
     $(reportGeneratorLocation)/reportgenerator -reports:$(build.sourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(codeCoverageReportLocation) -reporttypes:Cobertura
   displayName: Create code coverage report
 ```
+
+We're using the script keyword here. It's a shorcut for task. The difference between a task (e.g. a powershell, command line or bash task) is.
+
+Notice the usage of the | sign after the script keyword. This enables you to use multiline statements. Meaning that each line is a command.
 
 * Add a new task to publish code coverage report
 
@@ -181,25 +188,14 @@ arguments: '/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Thresho
     failIfCoverageEmpty: true
 ```
 
-We're using the script keyword here. It's a shorcut for task. The difference between a task (e.g. a powershell, command line or bash task) is.
-
-Notice the usage of the | sign after the script keyword. This enables you to use multiline statements. Meaning that each line is a command.
-
-### 6.1 Fail the build (optional)
-
-A threshold of 100% code coverage is demanded. Let's see if this really works.
-
-* Change the code of a tst by either removing a test or commenting out a test.
-* Save the changes and watch the build.
-
 ## 7 Add a new task that publishes the web project
 
-In this last step you are going to publish the web project, archive it using a custom name publish the zip to be used in the CD / release pipeline
+In this last step you are going to publish the web project, archive it and publish the zip to be used in the CD / release pipeline
 
 * First, add some new variables
 
 ```yaml
-  webProject: '**/Centric.Learning.Smoelenboek.csproj'
+  webProject: '$(build.sourcesDirectory)/**/Centric.Learning.Smoelenboek.csproj'
 ```
 
 * Add a task that publishes the web project and define the webproject's location in variable called $(webProject)
