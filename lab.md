@@ -127,21 +127,30 @@ name: $(date:yyyy).$(date:MM).$(date:dd)$(Rev:.r)
 
 ## 5 Add a new task to run the unit tests
 
-* Use the editor and copy and paste below task
+* First, add new variable
+
+```yaml
+testProjects: '**/tst/**/*.csproj'
+```
+
+* Copy and paste below task
 
 ```yaml
 - task: DotNetCoreCLI@2
   displayName: 'dotNet test'
   inputs:
     command: 'test'
-    projects: '$(build.sourcesDirectory)/**/tst/**/*.csproj'
+    projects: '$(testProjects)'
     publishTestResults: true
     testRunTitle: 'Smoelenboek tests'
     arguments: '--no-build --no-restore'
 ```
 
-* After the build ran notice the test report!
-* Note the @2 suffix in the name of the task. This denotes the version of the task.
+* Wait on the build to complete and notice the test report!
+
+Note the @2 suffix in the name of the task. This denotes the version of the task.
+
+Note the we use input arguments for the task. Adding --no-build and --no-restore forces the task to not build to solution again. If you omit the arguments the previously set version is gone.
 
 ## 6 Collect code coverage
 
@@ -150,8 +159,8 @@ Notice the code coverage report is empty. In this step you will add the neccasse
 * First, add some new variables
 
 ```yaml
-  reportGeneratorLocation: '$(build.sourcesDirectory)/tools'
-  codeCoverageReportLocation: '$(build.sourcesDirectory)/codecoverage'
+reportGeneratorLocation: '$(build.sourcesDirectory)/tools'
+codeCoverageReportLocation: '$(build.sourcesDirectory)/codecoverage'
 ```
 
 * Change the test task by changing the argument input with below example. Save the pipeline and wait on the build to complete.
