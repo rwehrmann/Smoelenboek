@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-* An Azure DevOps organization. Don't have one? Register one yourself via [link 1](https://app.vsaex.visualstudio.com/) or [link 2](https://azure.microsoft.com/en-us/services/devops/?nav=min) or [link 3](https://dev.azure.com/)
+* An Azure DevOps organization. Don't have one? Register one yourself via [link 1](https://app.vsaex.visualstudio.com/) or [link 2](https://azure.microsoft.com/en-us/services/devops/?nav=min) or [link 3](https://dev.azure.com/)
 
 For the sake of simplicity we will import the [code](https://github.com/rwehrmann/Smoelenboek) in your Azure DevOps Git repo allowing you to work independent of others without the hassle of branching.
 
