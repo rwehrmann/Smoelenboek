@@ -1,0 +1,82 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+name: $(date:yyyy).$(date:MM).$(date:dd)$(Rev:.r)
+
+trigger:
+  - master
+
+pool:
+  vmImage: "ubuntu-latest"
+
+variables:
+  solution: "**/*.sln"
+  system.debug: true
+  testProjects: "**/tst/**/*.csproj"
+  reportGeneratorLocation: "$(build.sourcesDirectory)/tools"
+  codeCoverageReportLocation: "$(build.sourcesDirectory)/codecoverage"
+  webProject: "**/src/**/Centric.Learning.Smoelenboek.csproj"
+
+steps:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: "build"
+      projects: "$(solution)"
+      arguments: "/p:Version=$(Build.BuildNumber) /p:AssemblyVersion=$(Build.BuildNumber)"
+
+  - task: DotNetCoreCLI@2
+    displayName: "dotNet test"
+    inputs:
+      command: "test"
+      projects: "$(testProjects)"
+      publishTestResults: true
+      testRunTitle: "Smoelenboek tests"
+      arguments: "/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Threshold=50 /p:ThresholdStat=Average --no-build --no-restore"
+
+  - script: |
+      dotnet tool install dotnet-reportgenerator-globaltool --tool-path $(reportGeneratorLocation)
+      $(reportGeneratorLocation)/reportgenerator -reports:$(build.sourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(codeCoverageReportLocation) -reporttypes:Cobertura
+    displayName: "Create code coverage report"
+
+  - task: PublishCodeCoverageResults@1
+    displayName: "Publish code coverage"
+    inputs:
+      codeCoverageTool: "Cobertura"
+      summaryFileLocation: "$(codeCoverageReportLocation)/Cobertura.xml"
+      reportDirectory: "$(codeCoverageReportLocation)"
+      failIfCoverageEmpty: true
+
+  # Optionally add a quality gate based on code coverage
+  # extension from Marketplace https://marketplace.visualstudio.com/acquisition?itemName=mspremier.BuildQualityChecks
+  # https://github.com/MicrosoftPremier/VstsExtensions/blob/master/BuildQualityChecks/en-US/CodeCoveragePolicy.md
+  #- task: BuildQualityChecks@7
+  #  displayName: 'Check build quality'
+  #  inputs:
+  #    checkCoverage: true
+  #    coverageFailOption: fixed
+  #    coverageType: branches
+  #    coverageThreshold: 64
+  #    coverageVariance: 1
+
+  - script: |
+      dotnet publish $(webProject) --output $(build.artifactstagingdirectory) --no-build --no-restore
+    displayName: "dotNet publish"
+
+  - task: ArchiveFiles@2
+    displayName: "Zip published output"
+    inputs:
+      rootFolderOrFile: "$(build.artifactstagingdirectory)"
+      includeRootFolder: false
+      archiveType: "zip"
+      archiveFile: "$(build.artifactstagingdirectory)/$(Build.DefinitionName)-$(Build.BuildNumber).zip"
+      replaceExistingArchive: true
+      verbose: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifact $(Build.DefinitionName)"
+    inputs:
+      PathtoPublish: "$(build.artifactstagingdirectory)/$(Build.DefinitionName)-$(Build.BuildNumber).zip"
+      ArtifactName: "SmoelenBoek"
+      publishLocation: "Container"
